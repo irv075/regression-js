@@ -158,7 +158,7 @@ const methods = {
     const run = ((len * sum[2]) - (sum[0] * sum[0]));
     const rise = ((len * sum[3]) - (sum[0] * sum[1]));
     const gradient = run === 0 ? 0 : round(rise / run, options.precision);
-    const intercept = round(Math.exp((sum[1] / len) - ((gradient * sum[0]) / len)), 
+    const intercept = round(Math.exp((sum[1] / len) - ((gradient * sum[0]) / len)),
                             options.precision);
 
     const predict = x => ([
