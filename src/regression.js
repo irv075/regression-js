@@ -142,38 +142,38 @@ const methods = {
   },
 
   exponential(data, options) {
-    const sum = [0, 0, 0, 0, 0, 0];
-
-    for (let n = 0; n < data.length; n++) {
-      if (data[n][1] !== null) {
-        sum[0] += data[n][0];
-        sum[1] += data[n][1];
-        sum[2] += data[n][0] * data[n][0] * data[n][1];
-        sum[3] += data[n][1] * Math.log(data[n][1]);
-        sum[4] += data[n][0] * data[n][1] * Math.log(data[n][1]);
-        sum[5] += data[n][0] * data[n][1];
+    const sum = [0, 0, 0, 0, 0];
+      let len = 0;
+      for (let n = 0; n < data.length; n++) {
+        if (data[n][1] !== null) {
+          len++;
+          sum[0] += data[n][0];
+          sum[1] += Math.log(data[n][1]);
+          sum[2] += data[n][0] * data[n][0];
+          sum[3] += data[n][0] * Math.log(data[n][1]);
+          sum[4] += Math.log(data[n][1]) * Math.log(data[n][1]);
+        }
       }
-    }
 
-    const denominator = ((sum[1] * sum[2]) - (sum[5] * sum[5]));
-    const a = Math.exp(((sum[2] * sum[3]) - (sum[5] * sum[4])) / denominator);
-    const b = ((sum[1] * sum[4]) - (sum[5] * sum[3])) / denominator;
-    const coeffA = round(a, options.precision);
-    const coeffB = round(b, options.precision);
-    const predict = x => ([
-      round(x, options.precision),
-      round(coeffA * Math.exp(coeffB * x), options.precision),
-    ]);
+      const run = ((len * sum[2]) - (sum[0] * sum[0]));
+      const rise = ((len * sum[3]) - (sum[0] * sum[1]));
+      const gradient = run === 0 ? 0 : round(rise / run, options.precision);
+      const intercept = round(Math.exp((sum[1] / len) - ((gradient * sum[0]) / len)), options.precision);
 
-    const points = data.map(point => predict(point[0]));
+      const predict = x => ([
+        round(x, options.precision),
+        round(intercept * Math.exp(gradient * x), options.precision),
+      ]);
 
-    return {
-      points,
-      predict,
-      equation: [coeffA, coeffB],
-      string: `y = ${coeffA}e^(${coeffB}x)`,
-      r2: round(determinationCoefficient(data, points), options.precision),
-    };
+      const points = data.map(point => predict(point[0]));
+
+      return {
+        points,
+        predict,
+        equation: [intercept, gradient],
+        string: `y = ${intercept}e^(${gradient}x)`,
+        r2: round(determinationCoefficient(data, points), options.precision),
+      };
   },
 
   logarithmic(data, options) {
