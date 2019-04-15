@@ -1,8 +1,8 @@
 
 <div align="center">
 <h1>regression-js</h1>
-<a href="https://travis-ci.org/Tom-Alexander/regression-js">
-<img src="https://travis-ci.org/Tom-Alexander/regression-js.svg?branch=master"/>
+<a href="https://travis-ci.org/irv075/regression-js">
+<img src="https://travis-ci.org/irv075/regression-js.svg?branch=master"/>
 </a>
 <a href="https://npmjs.com/package/regression">
 <img src="https://img.shields.io/npm/v/regression.svg" alt="npm version" />
@@ -10,7 +10,7 @@
 <a href="https://npmjs.com/package/regression">
 <img src="https://img.shields.io/npm/dt/regression.svg" alt="npm downloads" />
 </a>
-<a href="https://codeclimate.com/github/Tom-Alexander/regression-js/coverage"><img src="https://codeclimate.com/github/Tom-Alexander/regression-js/badges/coverage.svg" /></a>
+<a href="https://codeclimate.com/github/irv075/regression-js/coverage"><img src="https://codeclimate.com/github/irv075/regression-js/badges/coverage.svg" /></a>
 <br/>
 <br/>
 <p>
