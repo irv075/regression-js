@@ -190,7 +190,7 @@ const methods = {
         sum[3] += Math.log(data[n][0]) * data[n][1];
       }
     }
-    
+
     const run = ((len * sum[2]) - (sum[0] * sum[0]));
     const rise = ((len * sum[3]) - (sum[0] * sum[1]));
     const gradient = run === 0 ? 0 : round(rise / run, options.precision);
