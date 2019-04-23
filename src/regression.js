@@ -178,37 +178,40 @@ const methods = {
   },
 
   logarithmic(data, options) {
-    const sum = [0, 0, 0, 0];
-    const len = data.length;
+      const sum = [0, 0, 0, 0];
+      let len = 0;
 
-    for (let n = 0; n < len; n++) {
-      if (data[n][1] !== null) {
-        sum[0] += Math.log(data[n][0]);
-        sum[1] += data[n][1] * Math.log(data[n][0]);
-        sum[2] += data[n][1];
-        sum[3] += (Math.log(data[n][0]) ** 2);
+      for (var n = 0; n < data.length; n++) {
+        if (data[n][1] !== null && data[n][1] !== 0) {
+          len++;
+          sum[0] += Math.log(data[n][0]);
+          sum[1] += data[n][1];
+          sum[2] += Math.log(data[n][0]) * Math.log(data[n][0]);
+          sum[3] += Math.log(data[n][0]) * data[n][1];
+        }
       }
-    }
+      
+      const run = ((len * sum[2]) - (sum[0] * sum[0]));
+      const rise = ((len * sum[3]) - (sum[0] * sum[1]));
+      const gradient = run === 0 ? 0 : round(rise / run, options.precision);
+      const intercept = round((sum[1] / len) - ((gradient * sum[0]) / len), options.precision);
 
-    const a = ((len * sum[1]) - (sum[2] * sum[0])) / ((len * sum[3]) - (sum[0] * sum[0]));
-    const coeffB = round(a, options.precision);
-    const coeffA = round((sum[2] - (coeffB * sum[0])) / len, options.precision);
+      const predict = x => ([
+        round(x, options.precision),
+        round(intercept + gradient * Math.log(x), options.precision),
+      ]);
 
-    const predict = x => ([
-      round(x, options.precision),
-      round(round(coeffA + (coeffB * Math.log(x)), options.precision), options.precision),
-    ]);
-
-    const points = data.map(point => predict(point[0]));
-
-    return {
-      points,
-      predict,
-      equation: [coeffA, coeffB],
-      string: `y = ${coeffA} + ${coeffB} ln(x)`,
-      r2: round(determinationCoefficient(data, points), options.precision),
-    };
-  },
+      const points = data.map(point => predict(point[0]));
+      console.log(data);
+      console.log(points);
+      return {
+        points,
+        predict,
+        equation: [intercept, gradient],
+        string: `y = ${intercept} + ${gradient} ln(x)`,
+        r2: round(determinationCoefficient(data, points), options.precision),
+      };
+    },
 
   power(data, options) {
     const sum = [0, 0, 0, 0, 0];
